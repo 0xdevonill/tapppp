@@ -13,7 +13,7 @@ export function PegBoard({ coin }: { coin: Coin }) {
   const max = Math.max(hood, sol, 1);
 
   return (
-    <div className="hairline rounded-2xl bg-card/80 p-5 sm:p-7">
+    <div className="panel p-5 sm:p-7">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">

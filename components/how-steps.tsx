@@ -4,7 +4,7 @@ const STEPS = [
   {
     n: "01",
     title: "Create",
-    body: "Name, ticker, picture, a funding goal from $2,500. One minute. Only gas.",
+    body: "Name, ticker, logo, a soft cap from $2,500. One minute. Only gas.",
   },
   {
     n: "02",
@@ -14,7 +14,7 @@ const STEPS = [
   {
     n: "03",
     title: "It launches",
-    body: "Goal hit. The coin is created on PONS and pump.fun in the same minute, from wallets nobody has seen before. Backers are the first buy on both chains.",
+    body: "Soft cap hit. The coin is created on PONS and pump.fun in the same minute, from wallets nobody has seen before. Backers are the first buy on both chains.",
   },
   {
     n: "04",
@@ -29,7 +29,7 @@ export function HowSteps() {
       {STEPS.map((step) => (
         <li
           key={step.n}
-          className="hairline relative overflow-hidden rounded-2xl bg-card/70 p-6"
+          className="panel relative overflow-hidden p-6"
         >
           <p className="font-mono text-xs tracking-[0.2em] text-gold">{step.n}</p>
           <h3 className="mt-3 font-display text-2xl font-semibold">{step.title}</h3>

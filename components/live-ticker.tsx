@@ -18,7 +18,12 @@ export function LiveTicker() {
       (c) =>
         `${c.ticker} live · Hood ${formatUsd(c.mcapRobinhood ?? 0)} · Sol ${formatUsd(c.mcapSolana ?? 0)}`
     );
-  const row = [...events, ...live, "Hot: first buy is locked for backers", "4% peg · 1 minute launch · gas only to create"];
+  const row = [
+    ...events,
+    ...live,
+    "Soft cap fills · first buy is locked",
+    "4% peg · 1 minute launch · gas only to create",
+  ];
   const loop = [...row, ...row];
 
   return (

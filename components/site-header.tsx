@@ -26,15 +26,15 @@ export function SiteHeader() {
   const funding = coins.filter((c) => c.status === "funding").length;
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/8 bg-[#07070b]/75 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
+    <header className="sticky top-0 z-50 border-b border-white/8 bg-[#07070b]/80 backdrop-blur-2xl">
+      <div className="mx-auto flex h-[4.25rem] max-w-6xl items-center justify-between px-4 sm:px-6">
         <Link href="/" className="flex items-center gap-2.5">
           <Image
             src="/brand/logo.png"
             alt="Twins"
             width={32}
             height={32}
-            className="size-8 rounded-full ring-1 ring-gold/40"
+            className="size-8 rounded-full ring-1 ring-gold/50"
           />
           <span className="font-display text-lg font-semibold tracking-tight">
             TWINS

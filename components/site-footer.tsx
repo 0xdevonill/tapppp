@@ -8,7 +8,7 @@ export function SiteFooter() {
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr]">
         <div>
           <div className="flex items-center gap-2.5">
-            <Image src="/brand/logo.png" alt="" width={32} height={32} className="size-8 rounded-full" />
+            <Image src="/brand/logo.png" alt="" width={32} height={32} className="size-8 rounded-full ring-1 ring-gold/40" />
             <span className="font-display text-lg font-semibold">TWINS</span>
           </div>
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted-foreground">
@@ -17,7 +17,7 @@ export function SiteFooter() {
           </p>
         </div>
         <div>
-          <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
+          <p className="text-[11px] uppercase tracking-[0.18em] text-gold">
             Product
           </p>
           <ul className="mt-3 space-y-2 text-sm">
@@ -39,7 +39,7 @@ export function SiteFooter() {
           </ul>
         </div>
         <div>
-          <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
+          <p className="text-[11px] uppercase tracking-[0.18em] text-gold">
             Venues
           </p>
           <ul className="mt-3 space-y-2 text-sm">

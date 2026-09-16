@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { TokenLogo, TickerChip } from "@/components/token-logo";
+import { Eyebrow, Panel } from "@/components/ui-bits";
 import { CHAINS, GOAL_PRESETS, SITE, WINDOW_PRESETS } from "@/lib/constants";
 import { useCoins } from "@/lib/store";
 import { formatUsd } from "@/lib/format";
@@ -67,7 +69,7 @@ export default function LaunchPage() {
       goalUsd: goal,
       windowHours,
     });
-    toast.success(`${coin.ticker} is open for backing on both chains.`);
+    toast.success(`${coin.ticker} is open. Soft cap ${formatUsd(goal)}.`);
     router.push(`/coins/${coin.slug}`);
   }
 
@@ -75,19 +77,19 @@ export default function LaunchPage() {
     <AppShell>
       <section className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[1.1fr_0.9fr]">
         <div>
-          <p className="text-xs uppercase tracking-[0.2em] text-gold">Launch</p>
+          <Eyebrow>Launch</Eyebrow>
           <h1 className="mt-3 font-display text-4xl font-semibold sm:text-6xl">
             Launch on two chains.
           </h1>
           <p className="mt-4 max-w-xl text-lg text-muted-foreground">
-            One form. When the goal is in, your coin goes live on Robinhood Chain
-            and Solana in the same minute, from wallets nobody has seen before,
-            with every backer inside the first buy.
+            One form. Set a soft cap. When it fills, your coin goes live on
+            Robinhood Chain and Solana in the same minute, from wallets nobody
+            has seen before, with every backer inside the first buy.
           </p>
 
           <div className="mt-10 space-y-8">
-            <fieldset className="hairline space-y-4 rounded-2xl p-5">
-              <legend className="px-1 text-xs uppercase tracking-[0.18em] text-gold">
+            <fieldset className="panel space-y-5 p-6">
+              <legend className="px-1 text-[11px] uppercase tracking-[0.18em] text-gold">
                 1 · Identity
               </legend>
               <div className="grid gap-4 sm:grid-cols-2">
@@ -125,24 +127,24 @@ export default function LaunchPage() {
                 />
               </div>
               <div>
-                <Label>Picture</Label>
+                <Label>Token logo</Label>
                 <p className="mt-1 mb-3 text-xs text-muted-foreground">
-                  Under 4 MB. Used on PONS and pump.fun.
+                  Under 4 MB. The same picture is used on PONS and pump.fun.
                 </p>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap items-center gap-3">
                   {PRESET_ART.map((src) => (
                     <button
                       key={src}
                       type="button"
                       onClick={() => setImage(src)}
-                      className={`size-14 overflow-hidden rounded-xl ring-2 ${
+                      className={`rounded-full ring-2 ring-offset-2 ring-offset-[#07070b] ${
                         image === src ? "ring-gold" : "ring-transparent"
                       }`}
                     >
-                      <img src={src} alt="" className="size-full object-cover" />
+                      <TokenLogo src={src} alt="" size="sm" />
                     </button>
                   ))}
-                  <label className="flex size-14 cursor-pointer items-center justify-center rounded-xl border border-dashed border-white/20 text-xs text-muted-foreground">
+                  <label className="flex size-12 cursor-pointer items-center justify-center rounded-full border border-dashed border-white/20 text-xs text-muted-foreground">
                     +
                     <input
                       type="file"
@@ -155,10 +157,14 @@ export default function LaunchPage() {
               </div>
             </fieldset>
 
-            <fieldset className="hairline space-y-4 rounded-2xl p-5">
-              <legend className="px-1 text-xs uppercase tracking-[0.18em] text-gold">
-                2 · Funding goal
+            <fieldset className="panel space-y-5 p-6">
+              <legend className="px-1 text-[11px] uppercase tracking-[0.18em] text-gold">
+                2 · Soft cap
               </legend>
+              <p className="text-sm text-muted-foreground">
+                Fill this number and the twin launches. There is no leftover
+                allocation. Overpayments bounce back to the sender.
+              </p>
               <div className="flex flex-wrap gap-2">
                 {GOAL_PRESETS.map((g) => (
                   <button
@@ -210,21 +216,35 @@ export default function LaunchPage() {
           </div>
         </div>
 
-        <aside className="lg:pt-28">
-          <div className="hairline sticky top-24 overflow-hidden rounded-3xl bg-card/80">
-            <div className="relative h-56">
-              <img src={image} alt="" className="size-full object-cover" />
-              <div className="absolute inset-0 bg-linear-to-t from-card to-transparent" />
-              <div className="absolute right-5 bottom-4 left-5">
-                <p className="font-display text-3xl">{name || "Your coin"}</p>
-                <p className="font-mono text-gold">${ticker || "TICKER"}</p>
-              </div>
-            </div>
-            <div className="space-y-4 p-5">
-              <p className="text-sm text-muted-foreground">
-                Goal {formatUsd(goal)} · Opens now · Closes in {windowHours} hours
+        <aside className="lg:pt-24">
+          <Panel className="sticky top-24 overflow-hidden">
+            <div className="flex flex-col items-center bg-[radial-gradient(circle_at_50%_30%,rgba(232,195,106,0.16),transparent_64%)] px-6 pt-10 pb-6">
+              <TokenLogo src={image} alt="" size="xl" glow />
+              <TickerChip ticker={ticker || "TICKER"} className="mt-5" />
+              <p className="mt-3 font-display text-3xl font-semibold">
+                {name || "Your coin"}
               </p>
-              <ul className="space-y-3 text-sm">
+            </div>
+            <div className="space-y-4 border-t border-white/8 p-6">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                    Soft cap
+                  </p>
+                  <p className="mt-1 font-display text-xl font-semibold text-gold">
+                    {formatUsd(goal)}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                    Window
+                  </p>
+                  <p className="mt-1 font-display text-xl font-semibold">
+                    {windowHours}h
+                  </p>
+                </div>
+              </div>
+              <ul className="space-y-2 text-sm">
                 {CHAINS.map((c) => (
                   <li
                     key={c.id}
@@ -242,7 +262,7 @@ export default function LaunchPage() {
                 ))}
               </ul>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>01 You create. Name, ticker, picture, goal. Only gas.</li>
+                <li>01 You create. Name, ticker, logo, soft cap. Only gas.</li>
                 <li>02 Backers send ETH or SOL straight to an address.</li>
                 <li>03 Live on both chains within a minute.</li>
                 <li>04 Half the raise becomes the bot&apos;s war chest.</li>
@@ -252,7 +272,7 @@ export default function LaunchPage() {
                 browser.
               </p>
             </div>
-          </div>
+          </Panel>
         </aside>
       </section>
     </AppShell>

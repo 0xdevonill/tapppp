@@ -12,12 +12,13 @@ import { Button } from "@/components/ui/button";
 import { useCoins } from "@/lib/store";
 import { CHAINS, SITE } from "@/lib/constants";
 import { formatUsd } from "@/lib/format";
+import { Eyebrow } from "@/components/ui-bits";
 
 const STATS = [
   { k: "2", l: "chains, one launch, one minute" },
-  { k: "4%", l: "maximum gap the bot will allow" },
+  { k: "4%", l: "maximum gap the peg bot will allow" },
   { k: "3%", l: "trade fee — 2% funds the peg bot" },
-  { k: "$2,500", l: "minimum goal. Creating costs only gas" },
+  { k: "$2,500", l: "minimum soft cap. Creating costs only gas" },
 ];
 
 export default function HomePage() {
@@ -49,7 +50,7 @@ export default function HomePage() {
               height={64}
               className="size-14 rounded-full ring-1 ring-gold/50 sm:size-16"
             />
-            <p className="text-xs uppercase tracking-[0.28em] text-gold">
+            <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-gold">
               Twin-chain launchpad
             </p>
           </div>
@@ -103,14 +104,14 @@ export default function HomePage() {
         </div>
       </section>
 
-      <div className="border-y border-white/8 bg-black/30">
-        <div className="mx-auto grid max-w-6xl grid-cols-2 gap-px sm:grid-cols-4">
+      <div className="border-y border-white/8 bg-black/25">
+        <div className="mx-auto grid max-w-6xl grid-cols-2 divide-x divide-white/8 sm:grid-cols-4">
           {STATS.map((s) => (
-            <div key={s.l} className="px-5 py-7">
-              <p className="font-display text-3xl font-semibold text-gold sm:text-4xl">
+            <div key={s.l} className="px-5 py-8">
+              <p className="font-display text-3xl font-semibold tracking-tight text-gold sm:text-4xl">
                 {s.k}
               </p>
-              <p className="mt-2 text-sm text-muted-foreground">{s.l}</p>
+              <p className="mt-2 text-sm leading-snug text-muted-foreground">{s.l}</p>
             </div>
           ))}
         </div>
@@ -121,13 +122,13 @@ export default function HomePage() {
       </div>
 
       <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-        <p className="text-xs uppercase tracking-[0.2em] text-gold">The machine</p>
+        <Eyebrow>The machine</Eyebrow>
         <h2 className="mt-2 max-w-2xl font-display text-3xl font-semibold sm:text-5xl">
           Four moves. Then the bot never sleeps.
         </h2>
         <p className="mt-4 max-w-2xl text-muted-foreground">
-          Snipers watch deployer wallets. Twins never reuses one. When the goal
-          hits, both venues go live in the same minute and every backer is
+          Snipers watch deployer wallets. Twins never reuses one. When the soft
+          cap fills, both venues go live in the same minute and every backer is
           already in the first buy.
         </p>
         <div className="mt-10">
@@ -138,9 +139,7 @@ export default function HomePage() {
       <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
         <div className="mb-8 flex items-end justify-between gap-4">
           <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-gold">
-              The peg
-            </p>
+            <Eyebrow>The peg</Eyebrow>
             <h2 className="mt-2 font-display text-3xl font-semibold sm:text-4xl">
               Two books. One number.
             </h2>
@@ -156,9 +155,7 @@ export default function HomePage() {
       <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
         <div className="mb-8 flex items-end justify-between">
           <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-gold">
-              Every coin, both chains
-            </p>
+            <Eyebrow>Every coin, both chains</Eyebrow>
             <h2 className="mt-2 font-display text-3xl font-semibold sm:text-4xl">
               Funding now, and already live.
             </h2>
@@ -175,7 +172,7 @@ export default function HomePage() {
       </section>
 
       <section className="relative mx-auto max-w-6xl overflow-hidden px-4 py-8 sm:px-6">
-        <div className="hairline relative overflow-hidden rounded-3xl">
+        <div className="panel relative overflow-hidden">
           <Image
             src="/brand/wordmark.png"
             alt="TWINS"
@@ -187,15 +184,15 @@ export default function HomePage() {
               “You are inside the first buy, or you are not in at all.”
             </p>
             <p className="mt-6 max-w-xl text-muted-foreground">
-              Set a goal, share two addresses, and the moment the goal is in your
+              Set a soft cap, share two addresses, and the moment it fills your
               coin is live on Robinhood Chain and Solana — with every backer
               inside the first buy. Creating is free apart from gas. Launch fees
               come out of the raise.
             </p>
             <div className="mt-8 flex flex-wrap gap-x-8 gap-y-2 text-sm">
-              <span>{formatUsd(SITE.minGoal)} minimum goal</span>
+              <span>{formatUsd(SITE.minGoal)} minimum soft cap</span>
               <span>Gas only to create</span>
-              <span>1 minute from goal to live</span>
+              <span>1 minute from cap to live</span>
               <span>3% trade fee, 2% funds the bot</span>
             </div>
             <Button
@@ -214,14 +211,14 @@ export default function HomePage() {
           {[
             [
               "What do I need to launch?",
-              "A name, a ticker, a picture and a funding goal from $2,500. Creating costs only gas.",
+              "A name, a ticker, a picture and a soft cap from $2,500. Creating costs only gas.",
             ],
             [
               "How do backers pay?",
-              "They send ETH on Robinhood Chain or SOL on Solana to the coin's addresses from their own wallet. Anything over the goal comes straight back.",
+              "They send ETH on Robinhood Chain or SOL on Solana to the coin's addresses from their own wallet. Anything over the soft cap comes straight back.",
             ],
             [
-              "What happens when the goal is reached?",
+              "What happens when the soft cap is reached?",
               "The coin is created on Robinhood Chain (PONS) and Solana (pump.fun) within a minute, from wallets nobody has seen before. Backers are inside the first buy on both chains.",
             ],
             [
@@ -229,7 +226,7 @@ export default function HomePage() {
               "Every trade pays 3%. 2% of it funds a bot that buys wherever the coin is cheapest and sells wherever it is dearest, aiming to keep the gap under 4%.",
             ],
             [
-              "What if the goal is missed?",
+              "What if the soft cap is missed?",
               "Everyone is refunded to the wallet they paid from, automatically.",
             ],
           ].map(([q, a]) => (

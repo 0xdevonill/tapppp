@@ -1,4 +1,5 @@
 import { AppShell } from "@/components/app-shell";
+import { Eyebrow } from "@/components/ui-bits";
 import { CHAINS, SITE } from "@/lib/constants";
 import { formatUsd } from "@/lib/format";
 
@@ -6,7 +7,7 @@ export default function HowItWorksPage() {
   return (
     <AppShell>
       <article className="mx-auto max-w-3xl px-4 py-14 sm:px-6">
-        <p className="text-xs uppercase tracking-[0.2em] text-gold">Docs</p>
+        <Eyebrow>Docs</Eyebrow>
         <h1 className="mt-3 font-display text-4xl font-semibold sm:text-6xl">
           How Twins works.
         </h1>
@@ -17,12 +18,12 @@ export default function HowItWorksPage() {
         </p>
 
         <div className="mt-8 flex flex-wrap gap-3 text-sm">
-          <Chip>{formatUsd(SITE.minGoal)} minimum goal</Chip>
+          <Chip>{formatUsd(SITE.minGoal)} minimum soft cap</Chip>
           <Chip>{SITE.maxGapPct}% maximum gap</Chip>
           <Chip>
             {SITE.tradeFeePct}% trade fee, {SITE.botFeePct}% funds the bot
           </Chip>
-          <Chip>{SITE.launchMinutes} minute from goal to live</Chip>
+          <Chip>{SITE.launchMinutes} minute from soft cap to live</Chip>
         </div>
 
         <Section title="Overview">
@@ -34,9 +35,9 @@ export default function HowItWorksPage() {
             {SITE.maxGapPct}% of each other.
           </p>
           <p>
-            A launch is community funded. The creator sets a goal in dollars,
+            A launch is community funded. The creator sets a soft cap in dollars,
             backers send ETH or SOL to plain addresses, and the coin is created
-            the moment the goal is reached. Backers are inside the very first
+            the moment the cap is reached. Backers are inside the very first
             buy on every chain, so nobody can get in before them.
           </p>
           <ul className="mt-4 space-y-2">
@@ -59,11 +60,11 @@ export default function HowItWorksPage() {
               fee up front.
             </li>
             <li>
-              Name, ticker, picture. Up to 32 characters, up to 10 characters,
+              Name, ticker, logo. Up to 32 characters, up to 10 characters,
               under 4 MB. The picture is pinned and used on both chains.
             </li>
             <li>
-              Goal and window. A goal from {formatUsd(SITE.minGoal)} and a
+              Soft cap and window. A soft cap from {formatUsd(SITE.minGoal)} and a
               window between 6 hours and 7 days. Presets show the opening market
               cap they give.
             </li>
@@ -86,11 +87,11 @@ export default function HowItWorksPage() {
           </p>
           <ul className="mt-4 list-disc space-y-2 pl-5">
             <li>
-              Anything above what is left of the goal is refunded to the sender
+              Anything above what is left of the soft cap is refunded to the sender
               automatically.
             </li>
             <li>
-              Once the goal is hit, new transfers are rejected or returned.
+              Once the soft cap is hit, new transfers are rejected or returned.
             </li>
             <li>
               Your coins arrive on the chain you paid from, in the launch
@@ -104,7 +105,7 @@ export default function HowItWorksPage() {
         </Section>
 
         <Section title="Where the money goes">
-          <p>When the goal is reached, the raise is split in a fixed way.</p>
+          <p>When the soft cap is reached, the raise is split in a fixed way.</p>
           <div className="mt-4 overflow-hidden rounded-2xl border border-white/10">
             <Row
               k="Launch fees"
@@ -124,7 +125,7 @@ export default function HowItWorksPage() {
         <Section title="The launch">
           <ol className="list-decimal space-y-3 pl-5">
             <li>
-              Goal reached. Funding closes. New transfers are rejected or
+              Soft cap reached. Funding closes. New transfers are rejected or
               returned.
             </li>
             <li>
@@ -179,7 +180,7 @@ export default function HowItWorksPage() {
 
         <Section title="If something fails">
           <p>
-            Goal missed: if the window closes before the goal is reached, every
+            Soft cap missed: if the window closes before the cap is reached, every
             backer is refunded automatically to the wallet they paid from, on
             the chain they paid from.
           </p>
@@ -263,7 +264,7 @@ function Section({
 
 function Chip({ children }: { children: React.ReactNode }) {
   return (
-    <span className="rounded-full border border-white/10 bg-white/4 px-3 py-1">
+    <span className="rounded-full border border-gold/20 bg-gold/8 px-3 py-1 text-sm">
       {children}
     </span>
   );

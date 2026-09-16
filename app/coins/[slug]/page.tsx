@@ -4,14 +4,15 @@ import { use, useState } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { toast } from "sonner";
-import { Copy, Flame } from "lucide-react";
+import { ArrowLeft, Copy, Flame } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
-import { FundingBar } from "@/components/funding-bar";
+import { SoftCapMeter } from "@/components/soft-cap";
+import { TokenLogo, TickerChip } from "@/components/token-logo";
+import { ChainDot, Eyebrow, Panel, StatusChip } from "@/components/ui-bits";
 import { Countdown } from "@/components/countdown";
 import { PegBoard } from "@/components/peg-board";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { useCoins } from "@/lib/store";
 import { CHAINS } from "@/lib/constants";
 import {
@@ -90,7 +91,7 @@ export default function CoinPage({
       return;
     }
     if (next.status === "launching") {
-      toast.success("Goal hit. Launching on PONS and pump.fun now.");
+      toast.success("Soft cap hit. Launching on PONS and pump.fun now.");
     } else {
       toast.success(
         `Backed ${active.ticker} with ${formatUsd(Math.min(usd, remaining))} on ${chainMeta.short}.`
@@ -100,109 +101,150 @@ export default function CoinPage({
 
   return (
     <AppShell>
-      <section className="mx-auto grid max-w-6xl gap-10 px-4 py-10 sm:px-6 lg:grid-cols-[1.05fr_0.95fr]">
-        <div>
-          <Link href="/coins" className="text-sm text-muted-foreground hover:text-gold">
-            ← All coins
+      <section className="relative overflow-hidden">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-40"
+          style={{
+            backgroundImage: `radial-gradient(700px 420px at 18% 0%, rgba(232,195,106,0.16), transparent 60%), url(${active.image})`,
+            backgroundSize: "auto, 140%",
+            backgroundPosition: "center, center",
+            filter: "blur(28px)",
+          }}
+        />
+        <div className="absolute inset-0 bg-linear-to-b from-[#07070b]/70 via-[#07070b]/92 to-[#07070b]" />
+
+        <div className="relative mx-auto max-w-6xl px-4 pt-8 pb-4 sm:px-6">
+          <Link
+            href="/coins"
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground transition hover:text-gold"
+          >
+            <ArrowLeft className="size-3.5" /> All coins
           </Link>
-          <div className="relative mt-5 overflow-hidden rounded-3xl">
-            <img
-              src={active.image}
-              alt={active.name}
-              className="aspect-square w-full object-cover sm:aspect-4/3"
-            />
-            <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-black/20" />
-            <div className="absolute top-4 left-4 flex gap-2">
-              {almost && (
-                <Badge className="bg-lime text-black">
-                  <Flame className="size-3" /> FOMO
-                </Badge>
-              )}
-              <Badge className="bg-black/55 capitalize text-gold">{coin.status}</Badge>
-            </div>
-            <div className="absolute right-5 bottom-5 left-5">
-              <h1 className="font-display text-4xl font-semibold sm:text-5xl">
-                {coin.name}
-              </h1>
-              <p className="mt-1 font-mono tracking-[0.18em] text-gold">
-                ${coin.ticker}
-              </p>
-            </div>
-          </div>
-          <p className="mt-5 text-lg text-muted-foreground">{coin.blurb}</p>
 
-          {coin.status === "live" && (
-            <div className="mt-8">
-              <PegBoard coin={coin} />
+          <Panel className="mt-6 p-5 sm:p-8">
+            <div className="flex flex-col gap-8 md:flex-row md:items-center">
+              <TokenLogo
+                src={active.image}
+                alt={active.name}
+                size="xl"
+                glow
+                className="mx-auto md:mx-0"
+              />
+              <div className="min-w-0 flex-1 text-center md:text-left">
+                <div className="flex flex-wrap items-center justify-center gap-2 md:justify-start">
+                  <TickerChip ticker={active.ticker} />
+                  <StatusChip status={active.status} />
+                  {almost && (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-lime px-2.5 py-1 text-[11px] font-semibold text-black">
+                      <Flame className="size-3" /> Almost at soft cap
+                    </span>
+                  )}
+                </div>
+                <h1 className="mt-4 font-display text-4xl font-semibold tracking-tight sm:text-6xl">
+                  {active.name}
+                </h1>
+                <p className="mt-3 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
+                  {active.blurb}
+                </p>
+                <p className="mt-4 text-sm text-muted-foreground">
+                  Twin launch · Robinhood Chain via PONS · Solana via pump.fun
+                </p>
+              </div>
             </div>
-          )}
 
-          <div className="mt-8">
-            <h2 className="font-display text-2xl">Backers</h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {coin.backers.length} wallets. Coins land in the wallet that paid,
-              on the chain that paid.
+            {(active.status === "funding" || active.status === "launching") && (
+              <div className="mt-8 border-t border-white/8 pt-7">
+                <SoftCapMeter raised={active.raisedUsd} softCap={active.goalUsd} />
+                <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
+                  <span>
+                    Window{" "}
+                    <Countdown to={active.closesAt} className="text-foreground" />
+                  </span>
+                  <span>{active.backers.length} backers inside the first buy</span>
+                  <span>Over the soft cap bounces back</span>
+                </div>
+              </div>
+            )}
+
+            {active.status === "live" && (
+              <div className="mt-8 grid grid-cols-2 gap-4 border-t border-white/8 pt-7 sm:grid-cols-4">
+                <LiveStat label="Hood mcap" value={formatCompactUsd(active.mcapRobinhood ?? 0)} />
+                <LiveStat label="Sol mcap" value={formatCompactUsd(active.mcapSolana ?? 0)} />
+                <LiveStat label="Peg gap" value={formatPct(gap)} />
+                <LiveStat label="Bot chest" value={formatUsd(active.botChestUsd ?? 0)} />
+              </div>
+            )}
+          </Panel>
+        </div>
+      </section>
+
+      <section className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[1.05fr_0.95fr]">
+        <div className="space-y-8">
+          {active.status === "live" && <PegBoard coin={active} />}
+
+          <Panel className="p-5 sm:p-7">
+            <Eyebrow>First buyers</Eyebrow>
+            <h2 className="mt-2 font-display text-2xl font-semibold">Backers</h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              {active.backers.length} wallets. Coins land in the wallet that paid,
+              on the chain that paid — inside the launch transaction.
             </p>
-            <ul className="mt-4 divide-y divide-white/8 rounded-2xl border border-white/8">
-              {coin.backers.length === 0 && (
-                <li className="px-4 py-8 text-center text-sm text-muted-foreground">
-                  Be the first backer. First buy is still empty.
+            <ul className="mt-5 divide-y divide-white/8">
+              {active.backers.length === 0 && (
+                <li className="py-10 text-center text-sm text-muted-foreground">
+                  Be the first backer. The first buy is still empty.
                 </li>
               )}
-              {coin.backers.map((b) => {
+              {active.backers.map((b) => {
                 const c = CHAINS.find((x) => x.id === b.chain)!;
                 return (
                   <li
                     key={b.id}
-                    className="flex items-center justify-between gap-3 px-4 py-3 text-sm"
+                    className="flex items-center justify-between gap-3 py-3.5 text-sm"
                   >
-                    <span className="font-mono">{shorten(b.wallet)}</span>
-                    <span className="text-muted-foreground">
-                      {b.amountAsset.toFixed(2)} {c.asset} · {formatUsd(b.amountUsd)}
+                    <span className="flex min-w-0 items-center gap-2.5">
+                      <ChainDot chain={b.chain} />
+                      <span className="truncate font-mono">{shorten(b.wallet)}</span>
+                    </span>
+                    <span className="shrink-0 text-right">
+                      <span className="block font-mono text-foreground">
+                        {b.amountAsset.toFixed(2)} {c.asset}
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        {formatUsd(b.amountUsd)} · {c.short}
+                      </span>
                     </span>
                   </li>
                 );
               })}
             </ul>
-          </div>
+          </Panel>
         </div>
 
-        <aside className="lg:pt-8">
-          <div className="hairline sticky top-24 space-y-5 rounded-3xl bg-card/85 p-5 sm:p-6">
-            {coin.status === "funding" && (
-              <>
-                {almost && (
-                  <p className="flex items-center gap-2 rounded-xl bg-lime/12 px-3 py-2 text-sm text-lime">
-                    <span className="pulse-dot size-2 rounded-full bg-lime" />
-                    {pct.toFixed(0)}% filled. When this bar hits 100% the first
-                    buy is gone.
-                  </p>
-                )}
-                <FundingBar raised={coin.raisedUsd} goal={coin.goalUsd} />
-                <p className="text-sm text-muted-foreground">
-                  Closes in <Countdown to={coin.closesAt} className="text-foreground" />
-                  <span className="mx-2 text-white/20">·</span>
-                  {formatUsd(remaining)} left
-                </p>
-              </>
+        <aside>
+          <Panel className="sticky top-24 space-y-5 p-5 sm:p-6">
+            <div>
+              <Eyebrow>Backing desk</Eyebrow>
+              <h2 className="mt-2 font-display text-2xl font-semibold">
+                {active.status === "live" ? "Trade the twin" : "Get inside the first buy"}
+              </h2>
+            </div>
+
+            {active.status === "funding" && almost && (
+              <p className="flex items-center gap-2 rounded-2xl bg-lime/12 px-3.5 py-3 text-sm text-lime">
+                <span className="pulse-dot size-2 rounded-full bg-lime" />
+                {pct.toFixed(0)}% of the soft cap is in. When this fills, the first
+                buy is gone.
+              </p>
             )}
 
-            {coin.status === "launching" && (
+            {active.status === "launching" && (
               <div className="rounded-2xl bg-gold/12 p-4 text-gold">
-                <p className="pulse-dot font-display text-2xl">Launching…</p>
+                <p className="font-display text-2xl">Launching…</p>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Fresh wallets. Create + first buy on PONS and pump.fun in the
-                  same minute.
+                  Soft cap reached. Fresh wallets. Create + first buy on PONS and
+                  pump.fun in the same minute.
                 </p>
-              </div>
-            )}
-
-            {coin.status === "live" && (
-              <div className="grid grid-cols-2 gap-3 text-sm">
-                <Stat k="Hood mcap" v={formatCompactUsd(coin.mcapRobinhood ?? 0)} />
-                <Stat k="Sol mcap" v={formatCompactUsd(coin.mcapSolana ?? 0)} />
-                <Stat k="Peg gap" v={formatPct(gap)} />
-                <Stat k="Bot chest" v={formatUsd(coin.botChestUsd ?? 0)} />
               </div>
             )}
 
@@ -212,14 +254,26 @@ export default function CoinPage({
                   key={c.id}
                   type="button"
                   onClick={() => setChain(c.id)}
-                  className={`rounded-xl px-3 py-3 text-left text-sm ${
+                  className={`rounded-2xl px-3 py-3 text-left transition ${
                     chain === c.id
                       ? "bg-gold text-[#140f08]"
-                      : "bg-white/5 hover:bg-white/8"
+                      : "bg-white/4 hover:bg-white/8"
                   }`}
                 >
-                  <p className="font-medium">{c.short}</p>
-                  <p className={chain === c.id ? "text-[#140f08]/70" : "text-muted-foreground"}>
+                  <p className="flex items-center gap-2 text-sm font-medium">
+                    <span
+                      className="size-2 rounded-full"
+                      style={{
+                        background: chain === c.id ? "#140f08" : c.color,
+                      }}
+                    />
+                    {c.short}
+                  </p>
+                  <p
+                    className={`mt-1 text-xs ${
+                      chain === c.id ? "text-[#140f08]/70" : "text-muted-foreground"
+                    }`}
+                  >
                     {c.venue} · {c.asset}
                   </p>
                 </button>
@@ -227,42 +281,49 @@ export default function CoinPage({
             </div>
 
             <div>
-              <p className="text-xs uppercase tracking-[0.16em] text-muted-foreground">
+              <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
                 {chainMeta.name} address
               </p>
-              <div className="mt-2 flex items-center gap-2 rounded-xl bg-black/40 px-3 py-2 font-mono text-xs">
+              <div className="mt-2 flex items-center gap-2 rounded-2xl bg-black/45 px-3 py-2.5 font-mono text-xs">
                 <span className="flex-1 truncate">{address}</span>
-                <button type="button" onClick={copyAddr} className="text-gold">
+                <button
+                  type="button"
+                  onClick={copyAddr}
+                  className="rounded-full p-1 text-gold hover:bg-gold/10"
+                  aria-label="Copy address"
+                >
                   <Copy className="size-3.5" />
                 </button>
               </div>
-              <p className="mt-2 text-xs text-muted-foreground">
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
                 Demo address. Simulated backing only — never send real {chainMeta.asset}.
               </p>
             </div>
 
-            {coin.status === "funding" && (
+            {active.status === "funding" && (
               <div className="space-y-3">
                 <label className="text-sm">
-                  Back with USD on {chainMeta.asset}
+                  Amount in USD, paid in {chainMeta.asset}
                   <Input
                     value={amount}
                     inputMode="decimal"
-                    className="mt-2 h-11"
+                    className="mt-2 h-12 rounded-xl text-base"
                     onChange={(e) => setAmount(e.target.value)}
                   />
                 </label>
                 <div className="flex flex-wrap gap-2">
-                  {[50, 250, 500, remaining].filter((n) => n > 0).map((n) => (
-                    <button
-                      key={n}
-                      type="button"
-                      className="rounded-full bg-white/6 px-3 py-1 text-xs hover:bg-white/10"
-                      onClick={() => setAmount(String(Math.round(n)))}
-                    >
-                      {formatUsd(n)}
-                    </button>
-                  ))}
+                  {[50, 250, 500, remaining]
+                    .filter((n) => n > 0)
+                    .map((n) => (
+                      <button
+                        key={n}
+                        type="button"
+                        className="rounded-full bg-white/6 px-3 py-1.5 text-xs hover:bg-white/10"
+                        onClick={() => setAmount(String(Math.round(n)))}
+                      >
+                        {formatUsd(n)}
+                      </button>
+                    ))}
                 </div>
                 <Button
                   className="h-12 w-full rounded-full bg-gold text-base text-[#140f08] hover:bg-[#f4d78a]"
@@ -273,32 +334,38 @@ export default function CoinPage({
               </div>
             )}
 
-            <div className="grid grid-cols-2 gap-3 text-xs text-muted-foreground">
-              <p>
-                Hood raised
-                <span className="mt-1 block font-mono text-sm text-foreground">
+            <div className="grid grid-cols-2 gap-3 border-t border-white/8 pt-4">
+              <div>
+                <p className="flex items-center gap-1.5 text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+                  <ChainDot chain="robinhood" /> Hood raised
+                </p>
+                <p className="mt-1 font-display text-lg font-semibold">
                   {formatUsd(split.hood)}
-                </span>
-              </p>
-              <p>
-                Sol raised
-                <span className="mt-1 block font-mono text-sm text-foreground">
+                </p>
+              </div>
+              <div>
+                <p className="flex items-center gap-1.5 text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+                  <ChainDot chain="solana" /> Sol raised
+                </p>
+                <p className="mt-1 font-display text-lg font-semibold">
                   {formatUsd(split.sol)}
-                </span>
-              </p>
+                </p>
+              </div>
             </div>
-          </div>
+          </Panel>
         </aside>
       </section>
     </AppShell>
   );
 }
 
-function Stat({ k, v }: { k: string; v: string }) {
+function LiveStat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-xl bg-white/4 px-3 py-3">
-      <p className="text-xs text-muted-foreground">{k}</p>
-      <p className="mt-1 font-mono">{v}</p>
+    <div>
+      <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+        {label}
+      </p>
+      <p className="mt-1 font-display text-xl font-semibold">{value}</p>
     </div>
   );
 }
