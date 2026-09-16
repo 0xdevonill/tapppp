@@ -1,0 +1,245 @@
+import type { Coin } from "@/lib/types";
+
+function hoursFromNow(hours: number) {
+  return new Date(Date.now() + hours * 60 * 60 * 1000).toISOString();
+}
+
+function hoursAgo(hours: number) {
+  return new Date(Date.now() - hours * 60 * 60 * 1000).toISOString();
+}
+
+export const SEED_COINS: Coin[] = [
+  {
+    slug: "hoodcat",
+    name: "Hood Cat",
+    ticker: "HOODCAT",
+    image: "/coins/hoodcat.png",
+    blurb:
+      "The cat that got in before the street did. Hood up, chain on, first buy locked on both venues.",
+    goalUsd: 5000,
+    raisedUsd: 4460,
+    status: "funding",
+    openedAt: hoursAgo(20),
+    closesAt: hoursFromNow(4.1),
+    featured: true,
+    hot: true,
+    raisePerMinute: 18,
+    backers: [
+      {
+        id: "hc1",
+        chain: "robinhood",
+        wallet: "0x7a3f9c21d8b44e0aa19c2e1",
+        amountUsd: 1280,
+        amountAsset: 0.42,
+        at: hoursAgo(3.2),
+      },
+      {
+        id: "hc2",
+        chain: "solana",
+        wallet: "9hQeK2mWs4kPumperHood",
+        amountUsd: 1870,
+        amountAsset: 6.1,
+        at: hoursAgo(2.4),
+      },
+      {
+        id: "hc3",
+        chain: "robinhood",
+        wallet: "0x91bdaa08cc4412ffee19",
+        amountUsd: 610,
+        amountAsset: 0.2,
+        at: hoursAgo(1.1),
+      },
+      {
+        id: "hc4",
+        chain: "solana",
+        wallet: "FiRsTbUyTwInS0l",
+        amountUsd: 700,
+        amountAsset: 2.28,
+        at: hoursAgo(0.35),
+      },
+    ],
+    botTrades: [],
+  },
+  {
+    slug: "twinpepe",
+    name: "Twin Pepe",
+    ticker: "TWINPEPE",
+    image: "/coins/twinpepe.png",
+    blurb: "Two frogs. One ticker. If you wait for the chart, you already missed the first buy.",
+    goalUsd: 2500,
+    raisedUsd: 1820,
+    status: "funding",
+    openedAt: hoursAgo(8),
+    closesAt: hoursFromNow(16),
+    hot: true,
+    raisePerMinute: 9,
+    backers: [
+      {
+        id: "tp1",
+        chain: "solana",
+        wallet: "PepeTw1nSoLanaBag",
+        amountUsd: 940,
+        amountAsset: 3.07,
+        at: hoursAgo(4),
+      },
+      {
+        id: "tp2",
+        chain: "robinhood",
+        wallet: "0xcc44aa19deadd00d",
+        amountUsd: 880,
+        amountAsset: 0.29,
+        at: hoursAgo(1.8),
+      },
+    ],
+    botTrades: [],
+  },
+  {
+    slug: "mirror",
+    name: "Mirror",
+    ticker: "MIRROR",
+    image: "/coins/mirror.png",
+    blurb: "Same face, two books. The bot stares at both prices until they agree.",
+    goalUsd: 10000,
+    raisedUsd: 1240,
+    status: "funding",
+    openedAt: hoursAgo(2),
+    closesAt: hoursFromNow(70),
+    raisePerMinute: 22,
+    backers: [
+      {
+        id: "mr1",
+        chain: "robinhood",
+        wallet: "0x55eeaa0011bb99",
+        amountUsd: 740,
+        amountAsset: 0.24,
+        at: hoursAgo(1.2),
+      },
+      {
+        id: "mr2",
+        chain: "solana",
+        wallet: "MirR0rSoL111111",
+        amountUsd: 500,
+        amountAsset: 1.63,
+        at: hoursAgo(0.4),
+      },
+    ],
+    botTrades: [],
+  },
+  {
+    slug: "solhood",
+    name: "Sol Hood",
+    ticker: "SOLHOOD",
+    image: "/coins/solhood.png",
+    blurb: "Streetwear for the new L2. Live on PONS and pump.fun — prices hugging inside 1.8%.",
+    goalUsd: 5000,
+    raisedUsd: 5000,
+    status: "live",
+    openedAt: hoursAgo(40),
+    closesAt: hoursAgo(16),
+    launchedAt: hoursAgo(16),
+    mcapRobinhood: 212400,
+    mcapSolana: 208600,
+    volume24h: 94000,
+    botChestUsd: 4100,
+    backers: [
+      {
+        id: "sh1",
+        chain: "solana",
+        wallet: "SoLHoodEarly111",
+        amountUsd: 2100,
+        amountAsset: 6.85,
+        at: hoursAgo(28),
+      },
+      {
+        id: "sh2",
+        chain: "robinhood",
+        wallet: "0xab12cd34ef56",
+        amountUsd: 2900,
+        amountAsset: 0.95,
+        at: hoursAgo(22),
+      },
+    ],
+    botTrades: [
+      {
+        id: "sht1",
+        action: "buy",
+        chain: "solana",
+        usd: 312,
+        gapFrom: 6.1,
+        gapTo: 2.4,
+        at: hoursAgo(2.1),
+      },
+      {
+        id: "sht2",
+        action: "sell",
+        chain: "robinhood",
+        usd: 188,
+        gapFrom: 5.2,
+        gapTo: 1.9,
+        at: hoursAgo(0.8),
+      },
+    ],
+  },
+  {
+    slug: "dualdog",
+    name: "Dual Dog",
+    ticker: "DUALDOG",
+    image: "/coins/dualdog.png",
+    blurb: "Two heads, one bag. The first twin-chain dog that actually kept the peg.",
+    goalUsd: 10000,
+    raisedUsd: 10000,
+    status: "live",
+    openedAt: hoursAgo(90),
+    closesAt: hoursAgo(66),
+    launchedAt: hoursAgo(66),
+    mcapRobinhood: 481000,
+    mcapSolana: 469200,
+    volume24h: 210000,
+    botChestUsd: 8600,
+    backers: [
+      {
+        id: "dd1",
+        chain: "robinhood",
+        wallet: "0xdeadtwins0001",
+        amountUsd: 4000,
+        amountAsset: 1.31,
+        at: hoursAgo(80),
+      },
+      {
+        id: "dd2",
+        chain: "solana",
+        wallet: "DualD0gSoLaaaa",
+        amountUsd: 6000,
+        amountAsset: 19.6,
+        at: hoursAgo(72),
+      },
+    ],
+    botTrades: [
+      {
+        id: "ddt1",
+        action: "buy",
+        chain: "robinhood",
+        usd: 420,
+        gapFrom: 4.8,
+        gapTo: 2.1,
+        at: hoursAgo(5),
+      },
+      {
+        id: "ddt2",
+        action: "sell",
+        chain: "solana",
+        usd: 260,
+        gapFrom: 3.9,
+        gapTo: 1.4,
+        at: hoursAgo(1.4),
+      },
+    ],
+  },
+];
+
+export function gapPct(coin: Coin) {
+  if (!coin.mcapRobinhood || !coin.mcapSolana) return 0;
+  const mid = (coin.mcapRobinhood + coin.mcapSolana) / 2;
+  return (Math.abs(coin.mcapRobinhood - coin.mcapSolana) / mid) * 100;
+}
+
